@@ -1,6 +1,6 @@
 branch-defaults:
   main:
-    environment: artist-portfolio-prod
+    environment: null
     group_suffix: null
 environment-defaults:
   artist-portfolio-env:
