@@ -1,7 +1,14 @@
 branch-defaults:
   main:
-    environment: artist-portfolio-env
+    environment: artist-portfolio-prod
     group_suffix: null
+environment-defaults:
+  artist-portfolio-env:
+    branch: null
+    repository: null
+  artist-portfolio-prod:
+    branch: null
+    repository: null
 global:
   application_name: artist-portfolio
   branch: null
