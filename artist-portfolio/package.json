@@ -10,7 +10,9 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "NODE_ENV=production webpack --mode production",
     "prestart": "npm run build",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "npm run build && eb deploy",
+    "create-eb": "eb init && eb create artist-portfolio-env"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
