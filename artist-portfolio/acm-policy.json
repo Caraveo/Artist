@@ -1,0 +1,25 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "acm:RequestCertificate",
+                "acm:DescribeCertificate",
+                "acm:ListCertificates",
+                "acm:DeleteCertificate",
+                "acm:AddTagsToCertificate"
+            ],
+            "Resource": "arn:aws:acm:us-west-2:982534393775:certificate/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ListHostedZones",
+                "route53:GetChange",
+                "route53:ChangeResourceRecordSets"
+            ],
+            "Resource": "*"
+        }
+    ]
+} 

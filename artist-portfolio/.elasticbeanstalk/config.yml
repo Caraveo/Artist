@@ -1,6 +1,6 @@
 branch-defaults:
   main:
-    environment: artist-web-env
+    environment: null
     group_suffix: null
 deploy:
   artifact: build.zip
@@ -15,7 +15,7 @@ global:
   application_name: artist-portfolio
   branch: null
   default_ec2_keyname: null
-  default_platform: Node.js 18
+  default_platform: Node.js 22 running on 64bit Amazon Linux 2023
   default_region: us-west-2
   include_git_submodules: true
   instance_profile: null

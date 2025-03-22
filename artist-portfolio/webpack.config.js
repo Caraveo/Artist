@@ -17,8 +17,11 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-          },
+            presets: [
+              ['@babel/preset-env', { targets: { node: '18' } }],
+              '@babel/preset-react'
+            ]
+          }
         },
       },
       {
@@ -42,11 +45,11 @@ module.exports = {
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, 'public'),
+      directory: path.join(__dirname, 'dist'),
     },
     historyApiFallback: true,
     hot: true,
-    port: 3001,
+    port: 3000,
     open: true,
     proxy: {
       '/api': 'http://localhost:3000',

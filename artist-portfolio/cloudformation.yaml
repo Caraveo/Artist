@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for Jon Caraveo Artist Portfolio'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: production
+    Description: Environment name for the application
+  DomainName:
+    Type: String
+    Default: joncaraveo.com
+    Description: Domain name for the application
+  CertificateArn:
+    Type: String
+    Description: ARN of the SSL certificate for HTTPS
+
+Resources:
+  ElasticBeanstalkApplication:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      ApplicationName: artist-portfolio
+      Description: Jon Caraveo Artist Portfolio Application
+
+  ElasticBeanstalkEnvironment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName: !Ref ElasticBeanstalkApplication
+      EnvironmentName: !Sub ${EnvironmentName}-env
+      SolutionStackName: "64bit Amazon Linux 2023 v6.4.3 running Node.js 18"
+      OptionSettings:
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: !Ref InstanceProfile
+        - Namespace: aws:autoscaling:asg
+          OptionName: MinSize
+          Value: '1'
+        - Namespace: aws:autoscaling:asg
+          OptionName: MaxSize
+          Value: '2'
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: LoadBalanced
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: NODE_ENV
+          Value: production
+        - Namespace: aws:elasticbeanstalk:environment:proxy
+          OptionName: ProxyServer
+          Value: nginx
+        - Namespace: aws:elasticbeanstalk:container:nodejs
+          OptionName: NodeCommand
+          Value: "npm start"
+        - Namespace: aws:elbv2:listener:443
+          OptionName: Protocol
+          Value: HTTPS
+        - Namespace: aws:elbv2:listener:443
+          OptionName: SSLCertificateArns
+          Value: !Ref CertificateArn
+        - Namespace: aws:elbv2:listener:80
+          OptionName: Protocol
+          Value: HTTP
+        - Namespace: aws:elbv2:listener:80
+          OptionName: Rules
+          Value: ssl_redirect
+        - Namespace: aws:elbv2:listenerrule:ssl_redirect
+          OptionName: PathPatterns
+          Value: /*
+        - Namespace: aws:elbv2:listenerrule:ssl_redirect
+          OptionName: Process
+          Value: https_redirect
+        - Namespace: aws:elasticbeanstalk:environment:process:https_redirect
+          OptionName: Port
+          Value: '443'
+        - Namespace: aws:elasticbeanstalk:environment:process:https_redirect
+          OptionName: Protocol
+          Value: HTTPS
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: NPM_USE_PRODUCTION
+          Value: true
+        - Namespace: aws:elasticbeanstalk:command
+          OptionName: Timeout
+          Value: '600'
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker
+        - arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceRole
+
+  Route53RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub ${DomainName}.
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt ElasticBeanstalkEnvironment.EndpointURL
+        HostedZoneId: !GetAtt ElasticBeanstalkEnvironment.CanonicalHostedZoneID
+
+Outputs:
+  ApplicationURL:
+    Description: Application URL
+    Value: !Sub https://${DomainName}
+  ElasticBeanstalkEnvironmentURL:
+    Description: Elastic Beanstalk Environment URL
+    Value: !GetAtt ElasticBeanstalkEnvironment.EndpointURL 

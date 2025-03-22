@@ -1,0 +1,17 @@
+{
+    "Changes": [
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "_3a6650a2e129794a6ba7a10bd078a3a2.joncaraveo.com",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "_957851db144dd0402d73c639f7cbbb94.xlfgrmvvlj.acm-validations.aws"
+                    }
+                ]
+            }
+        }
+    ]
+} 
