@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -23,22 +23,22 @@ function App() {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
       <Box component="main" sx={{ flexGrow: 1 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/art" element={<Art />} />
-          <Route path="/cv" element={<CV />} />
-          <Route path="/commission" element={<Commission />} />
-          <Route path="/diary" element={<Diary />} />
-          <Route path="/fund" element={<Fund />} />
-          <Route path="/gestures" element={<Gestures />} />
-          <Route path="/model" element={<Model />} />
-          <Route path="/papeles" element={<Papeles />} />
-          <Route path="/pieces" element={<Pieces />} />
-          <Route path="/poser" element={<Poser />} />
-          <Route path="/taboo" element={<Taboo />} />
-          <Route path="/works" element={<Works />} />
-        </Routes>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/art" component={Art} />
+          <Route path="/cv" component={CV} />
+          <Route path="/commission" component={Commission} />
+          <Route path="/diary" component={Diary} />
+          <Route path="/fund" component={Fund} />
+          <Route path="/gestures" component={Gestures} />
+          <Route path="/model" component={Model} />
+          <Route path="/papeles" component={Papeles} />
+          <Route path="/pieces" component={Pieces} />
+          <Route path="/poser" component={Poser} />
+          <Route path="/taboo" component={Taboo} />
+          <Route path="/works" component={Works} />
+        </Switch>
       </Box>
       <Footer />
     </Box>
