@@ -2,9 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files first
+# Copy only package files first
 COPY package*.json ./
 COPY .npmrc ./
+COPY webpack.config.js ./
 
 # Install dependencies with legacy peer deps flag
 RUN npm install --legacy-peer-deps
@@ -12,7 +13,7 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application
 COPY . .
 
-# Build the application (separate from install)
+# Build the application
 RUN npm run build
 
 EXPOSE 3000
