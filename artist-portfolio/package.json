@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "build": "webpack --mode production",
-    "dev": "webpack serve --mode development",
-    "postinstall": "npm run build"
+    "dev": "webpack serve --mode development"
   },
   "dependencies": {
     "@babel/core": "^7.23.0",
